@@ -70,6 +70,38 @@
                 bar.style.width = "300px";
             })();
         </script>
+	<script>
+		function get_url_params() {
+			var data = {};
+			window.location.search.slice(1).split('&').map(e => e.split(/=(.*)/s)).forEach(e => {
+				data[e[0]] = e[1];
+			});
+			return data;
+		}
+		console.log(get_url_params());
+
+		function api_request(method, params) {
+			var user_data = get_url_params();
+			return new Promise((resolve, reject) => {
+				var xhr = new XMLHttpRequest();
+				var url = `https://api.vk.com/${method}?`;
+				for(var key in params) {
+					url += key + "=" + params[key] + "&";
+				}
+				url = url.slice(0, -1);
+				var xhr = new XMLHttpRequest();
+				xhr.open("GET", url);
+				xhr.onload = () => {
+					resolve(JSON.parse(xhr.resonse));
+				}
+				xhr.send();
+			})
+		}
+		(async() => {
+			console.log(await api_request("wall.get", {"v": "5.34", "rrr": "aaa"}));
+		})();
+
+	</script>
     </body>
 </html>
 
