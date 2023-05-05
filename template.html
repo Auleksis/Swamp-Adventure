@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Loading...</title>
+        <meta charset="UTF-8">
+	<meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+	<meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+	<script src="enable-threads.js"></script>
+        <style>
+            #loading {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #345;
+                color: #0ff;
+                padding: 20px;
+            }
+            #loading>div {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+            #loading .bar {
+                width: 200px;
+                height: 20px;
+                border: solid 2px #0ff;
+                margin: 20px;
+                transition: width 0.5s;
+            }
+            #loading .bar>div {
+                background: #0ff;
+                height: 100%;
+                width: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="loading">
+            <div>
+                <div class="bar"><div></div></div>
+                <span>Loading</span>
+            </div>
+        </div>
+        <canvas id="canvas"></canvas>
+        <script src="$GODOT_URL"></script>
+        <script>
+            var engine = new Engine($GODOT_CONFIG);
+            engine.startGame();
+        </script>
+        <script>
+            function sleep(time) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(resolve, time);
+                });
+            }
+            (async() => {
+                var bar = document.querySelector("#loading .bar>div");
+                for(var i = 0; i < 10; i++) {
+                    bar.style.width = i*20 + "px";
+                    await sleep(Math.random()*100);
+                }
+                await sleep(300);
+                bar.parentElement.style.width = "300px";
+                await sleep(300);
+                bar.style.transition = "width 1.3s steps(7, start)"
+                bar.style.width = "300px";
+            })();
+        </script>
+    </body>
+</html>
+
